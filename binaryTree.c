@@ -114,8 +114,54 @@ void PrintTable(binaryTree *root){
 //011101100
 int LookUp(binaryTree *root, char *address){
 
+	//Vai andando para baixo na árvore até chegar a uma folha da árvore
 	int lastHop;
+	int i;
+	int j = 1;
 	binaryTree *aux = root;
+	char addr[17];
+	strcpy(address, addr);
+
+	lastHop = aux->nextHop;
+	for(i = 0; i<16; i++){
+
+		if(aux->left == NULL && aux->right == NULL)
+			break;
+		else{
+			if(addr[0] == '0'){
+
+				aux = aux->left;
+				if(aux->nextHop != -1){
+					lastHop = aux->nextHop;
+					if(aux->left == NULL && aux->right == NULL)
+						break;
+				}
+
+			}else if (addr[0] == '1'){
+
+				aux = aux->right;
+				if(aux->nextHop != -1){
+					lastHop = aux->nextHop;
+					if(aux->left == NULL && aux->right == NULL)
+						break;
+				}
+
+			}else{
+
+				//Significa que o ficheiro de texto está incorreto?
+				printf("Endereço inválido, com caracteres diferentes de 0 e de 1\n");
+				exit(-1);
+			}
+		}
+		//retirar o caracter que já foi tratado (o 1º)
+		while(addr[j] != '\0'){
+			addr[j-1] =  addr[j];
+			j++;
+		}
+		addr[j-1] = '\0';
+		j=1;
+
+	}
 
 	return lastHop;
 }
