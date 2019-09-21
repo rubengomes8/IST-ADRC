@@ -9,7 +9,7 @@ typedef struct _binaryTree binaryTree;
 
 binaryTree *newNode(int nextHop);
 void removeNode(binaryTree *nodeToBeRemoved);
-void insertNewNode(char *prefix, binaryTree *root);
+binaryTree *insertNewNode(char *prefix, binaryTree *root);
 
 binaryTree *PrefixTree(FILE *fp);
 void PrintTable(binaryTree *root);

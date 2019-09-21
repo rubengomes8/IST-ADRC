@@ -26,7 +26,9 @@ void removeNode(binaryTree *nodeToBeRemoved){
 	free(nodeToBeRemoved);
 }
 
-void insertNewNode(char *prefix, binaryTree *root){
+binaryTree *insertNewNode(char *prefix, binaryTree *root){
+
+	//ter em atenção que pode exister um nó já com esse prefixo. O que acontece?
 
 	binaryTree *aux = root;
 	binaryTree *new;
@@ -71,7 +73,8 @@ void insertNewNode(char *prefix, binaryTree *root){
 		prefix[i-1] = '\0';
 		i=1;
 	}
-	
+
+	return aux;	
 }
 
 
@@ -79,7 +82,8 @@ void insertNewNode(char *prefix, binaryTree *root){
 binaryTree *PrefixTree(FILE *fp){
 	char prefix[16];
 	int nextHop;
-	binaryTree *root = newNode(-1);
+	binaryTree *root;
+	binaryTree *new;
 
 	if(fp){
 		fgets(prefix, sizeof(prefix), fp);
@@ -89,7 +93,9 @@ binaryTree *PrefixTree(FILE *fp){
 			if(!strcmp(prefix, "e")){ //epsilon do enunciado
 				root->nextHop = nextHop;
 			}else{
-				insertNewNode(prefix, root);
+				new = insertNewNode(prefix, root);
+				new->nextHop = nextHop;
+
 			}
 			
 
@@ -113,12 +119,60 @@ int LookUp(binaryTree *root, char *address){
 //InsertPrefix, that receives as input a prefix tree, a prefix and the associated next-hop, and returns a prefix tree with the prefix included;
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop){
 
+	binaryTree *new = insertNewNode(prefix, root);
+	new->nextHop = nextHop;
 	return root;
 }
 
 //DeletePrefix, that receives as input a prefix tree and a prefix and returns a prefix tree with the prefix withdrawn;
 binaryTree *DeletePrefix(binaryTree *root, char *prefix){
+	//se for folha faz free do node e mete o pai a apontar para NULL, se não for apenas mete o nextHop a -1
+	//ter em atenção que o prefixo pode não existir
+	binaryTree *aux = root;
+	binaryTree *prev;
+	int i = 1;
+	char flag;
 
+
+	while(strlen(prefix) > 0)
+	{
+		if(prefix[0] == '0'){
+
+			prev = aux;
+			aux = aux->left;
+			flag = 'l';
+
+		}else if (prefix[0] == '1'){
+
+			prev = aux;
+			aux = aux->right;
+			flag = 'r';
+
+		}else{
+
+			//Significa que o ficheiro de texto está incorreto?
+			printf("Ficheiro de texto contém prefixos invalidos, com caracteres diferentes de 0 e de 1\n");
+			exit(-1);
+		}
+
+		//retirar o caracter que já foi tratado (o 1º)
+		while(prefix[i] != '\0'){
+			prefix[i-1] =  prefix[i];
+			i++;
+		}
+		prefix[i-1] = '\0';
+		i=1;
+	}
+
+	if(aux->left == NULL && aux->right == NULL){
+		if(flag == 'l')
+			prev->left = NULL;
+		else if(flag == 'r')
+			prev->right = NULL;
+		free(aux);
+	} else{
+		aux->nextHop = -1;
+	}
 	return root;
 }
 
