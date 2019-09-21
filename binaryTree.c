@@ -83,7 +83,7 @@ binaryTree *PrefixTree(FILE *fp){
 	char prefix[16];
 	int nextHop;
 	binaryTree *root;
-	binaryTree *new;
+
 
 	if(fp){
 		fgets(prefix, sizeof(prefix), fp);
@@ -93,8 +93,8 @@ binaryTree *PrefixTree(FILE *fp){
 			if(!strcmp(prefix, "e")){ //epsilon do enunciado
 				root->nextHop = nextHop;
 			}else{
-				new = insertNewNode(prefix, root);
-				new->nextHop = nextHop;
+
+				root = InsertPrefix(root, prefix, nextHop);
 
 			}
 			
@@ -111,6 +111,7 @@ void PrintTable(binaryTree *root){
 }
 
 //LookUp, that receives as input a prefix tree and an address and returns the next-hop for that address;
+//011101100
 int LookUp(binaryTree *root, char *address){
 
 	int lastHop;
@@ -142,14 +143,28 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 		if(prefix[0] == '0'){
 
 			prev = aux;
-			aux = aux->left;
-			flag = 'l';
+			if(aux->left != NULL)
+			{
+				aux = aux->left;
+				flag = 'l';
+			} else {
+				printf("Esse prefixo não existe... A terminar tarefa...\n");
+				return root;
+			}
+			
 
 		}else if (prefix[0] == '1'){
 
 			prev = aux;
-			aux = aux->right;
-			flag = 'r';
+			if (aux->right != NULL){
+				aux = aux->right;
+				flag = 'r';
+			} else {
+				printf("Esse prefixo não existe... A terminar tarefa...\n");
+				return root;
+			}
+
+			
 
 		}else{
 
