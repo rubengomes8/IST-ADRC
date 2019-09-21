@@ -123,40 +123,59 @@ int getLevelCount(binaryTree *root)
     }
 }
 
-void printLevel(binaryTree *node, int level, int flag)
+void printLevel(binaryTree *node, int level, int flag, char *prefix)
 {
     if (node != NULL && level == 0)
     {	
-		if(node->nextHop!=-1){
-			if (flag==-1)
-				printf("e |\t");
+		if(node->nextHop!=-1)
+		{
+			if (strlen(prefix)==0)
+				printf("  e\t\t");
 			else
 			{
-				printf("%d |\t", flag);
+				//printf("%d |\t", flag);
+				printf(" %s\t\t", prefix);
 			}
 			
-        	printf("%d \n", node->nextHop);
+        	printf("%d\n ", node->nextHop);
+			
 		}
     }   
     else if (node != NULL)
     {
-		if (flag!=-1)	
-			printf("%d", flag);
-        printLevel(node->left, level - 1, 0);
-        printLevel(node->right, level - 1, 1);
+		//if (flag!=-1)	
+		//	printf("%d", flag);
+		char aux[level];
+		strcpy(aux, prefix);
+        printLevel(node->left, level - 1, 0, strcat(aux, "0"));	
+		strcpy(aux, prefix);	
+        printLevel(node->right, level - 1, 1, strcat(aux, "1"));
+		//printf("prefixo: %s\n", prefix);
+		prefix[0]='\0';
+		aux[0]='\0';
+		//printf("prefixo: %s\n", prefix);
     }
 }
 
 //PrintTable, that receives as input a prefix tree and prints to screen the corresponding prefix table;
 void PrintTable(binaryTree *root){
-	printf("Table:\n");
-	printf("Prefix| Nexthop \n");
+	
 	int i;
     int levelCount = getLevelCount(root);
+
+
+	char prefix[levelCount];
+	prefix[0]='\0';
+	
+	printf("%ld\n",strlen(prefix) );
+
+	printf("Table:\n");
+	printf("Prefix| Nexthop \n");
     for (i = 0; i < levelCount; i++)
     {
-		printf("nextlevel %d:\n", i);
-        printLevel(root, i,-1);
+		
+        printLevel(root, i,-1, prefix);
+		prefix[0]='\0';
 		
 		
     }

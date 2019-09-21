@@ -14,7 +14,7 @@ binaryTree *insertNewNode(char *prefix, binaryTree *root);
 binaryTree *PrefixTree(FILE *fp);
 
 int getLevelCount(binaryTree *root);
-void printLevel(binaryTree *node, int level,int flag);
+void printLevel(binaryTree *node, int level,int flag, char *prefix);
 void PrintTable(binaryTree *root);
 
 
