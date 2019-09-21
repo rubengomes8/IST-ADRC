@@ -113,7 +113,10 @@ void PrintTable(binaryTree *root){
 //LookUp, that receives as input a prefix tree and an address and returns the next-hop for that address;
 int LookUp(binaryTree *root, char *address){
 
-	return 0;
+	int lastHop;
+	binaryTree *aux = root;
+
+	return lastHop;
 }
 
 //InsertPrefix, that receives as input a prefix tree, a prefix and the associated next-hop, and returns a prefix tree with the prefix included;
