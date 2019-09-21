@@ -105,8 +105,61 @@ binaryTree *PrefixTree(FILE *fp){
 	return root;
 }
 
+int getLevelCount(binaryTree *root)
+{
+    if (root == NULL)
+    {
+        return 0;
+    }
+    int leftMaxLevel = 1 + getLevelCount(root->left);
+    int rightMaxLevel = 1 + getLevelCount(root->right);
+    if (leftMaxLevel > rightMaxLevel)
+    {
+        return leftMaxLevel;
+    }
+    else
+    {
+        return rightMaxLevel;
+    }
+}
+
+void printLevel(binaryTree *node, int level, int flag)
+{
+    if (node != NULL && level == 0)
+    {	
+		if(node->nextHop!=-1){
+			if (flag==-1)
+				printf("e |\t");
+			else
+			{
+				printf("%d |\t", flag);
+			}
+			
+        	printf("%d \n", node->nextHop);
+		}
+    }   
+    else if (node != NULL)
+    {
+		if (flag!=-1)	
+			printf("%d", flag);
+        printLevel(node->left, level - 1, 0);
+        printLevel(node->right, level - 1, 1);
+    }
+}
+
 //PrintTable, that receives as input a prefix tree and prints to screen the corresponding prefix table;
 void PrintTable(binaryTree *root){
+	printf("Table:\n");
+	printf("Prefix| Nexthop \n");
+	int i;
+    int levelCount = getLevelCount(root);
+    for (i = 0; i < levelCount; i++)
+    {
+		printf("nextlevel %d:\n", i);
+        printLevel(root, i,-1);
+		
+		
+    }
 
 }
 

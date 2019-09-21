@@ -12,7 +12,12 @@ void removeNode(binaryTree *nodeToBeRemoved);
 binaryTree *insertNewNode(char *prefix, binaryTree *root);
 
 binaryTree *PrefixTree(FILE *fp);
+
+int getLevelCount(binaryTree *root);
+void printLevel(binaryTree *node, int level,int flag);
 void PrintTable(binaryTree *root);
+
+
 int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);
 binaryTree *DeletePrefix(binaryTree *root, char *prefix);

@@ -8,6 +8,6 @@ int main(int argc, char *argv[]){
 	FILE *fp = fopen("./prefixTable.txt", "r");
 
 	root = PrefixTree(fp); //Cria árvore binária através do ficheiro de texto
-
+	PrintTable(root);
 	fclose(fp);
 }
