@@ -169,8 +169,8 @@ void PrintTable(binaryTree *root){
 	
 	printf("%ld\n",strlen(prefix) );
 
-	printf("Table:\n");
-	printf("Prefix| Nexthop \n");
+	printf("Tabela:\n");
+	printf("Prefixo | Nexthop \n");
     for (i = 0; i < levelCount; i++)
     {
 		
