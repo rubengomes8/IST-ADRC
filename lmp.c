@@ -22,8 +22,9 @@ int main(int argc, char *argv[]){
 		printf("- Sair                             --> premir e\n");
 
 		fflush(stdin);
-		fgets(option, 2, stdin);
-		printf("%s", option);printf("ola");
+		fgets(option, 3, stdin);
+        option[1]='\0';
+		printf("%s\n", option);printf("ola\n");
 
 		if(!strcasecmp(option, "p")){
 			PrintTable(root);
