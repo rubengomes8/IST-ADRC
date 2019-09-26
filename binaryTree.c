@@ -192,10 +192,10 @@ int LookUp(binaryTree *root, char *address){
 	int j = 1;
 	binaryTree *aux = root;
 	char addr[17];
-	strcpy(address, addr);
+	strcpy(addr, address);
 
 	lastHop = aux->nextHop;
-	for(i = 0; i<16; i++){
+	for(i = 0; i<17; i++){
 
 		if(aux->left == NULL && aux->right == NULL)
 			break;
@@ -218,6 +218,8 @@ int LookUp(binaryTree *root, char *address){
 						break;
 				}
 
+			}else if (addr[0] == '.'){
+				continue;
 			}else{
 
 				//Significa que o ficheiro de texto está incorreto?
