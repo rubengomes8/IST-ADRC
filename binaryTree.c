@@ -34,7 +34,7 @@ binaryTree *insertNewNode(char *prefix, binaryTree *root){
 	binaryTree *new;
 	int i=1;
 
-	printf("prefix: %s\n", prefix);
+	//printf("prefix: %s\n", prefix);
 	while(strlen(prefix) > 0)
 	{
 		if(prefix[0] == '0'){
@@ -191,35 +191,40 @@ int LookUp(binaryTree *root, char *address){
 	int i;
 	int j = 1;
 	binaryTree *aux = root;
-	char addr[17];
+	char addr[18];
 	strcpy(addr, address);
+	addr[16] = '\0';
 
 	lastHop = aux->nextHop;
-	for(i = 0; i<17; i++){
+	for(i = 0; i<16; i++){
 
 		if(aux->left == NULL && aux->right == NULL)
 			break;
 		else{
 			if(addr[0] == '0'){
 
-				aux = aux->left;
+				if(aux->left != NULL)
+					aux = aux->left;
+				else
+					break;
 				if(aux->nextHop != -1){
 					lastHop = aux->nextHop;
-					if(aux->left == NULL && aux->right == NULL)
-						break;
+					/*if(aux->left == NULL && aux->right == NULL)
+						break;*/
 				}
 
 			}else if (addr[0] == '1'){
 
-				aux = aux->right;
+				if(aux->right != NULL)
+					aux = aux->right;
+				else 
+					break;
 				if(aux->nextHop != -1){
 					lastHop = aux->nextHop;
-					if(aux->left == NULL && aux->right == NULL)
-						break;
+					/*if(aux->left == NULL && aux->right == NULL)
+						break;*/
 				}
 
-			}else if (addr[0] == '.'){
-				continue;
 			}else{
 
 				//Significa que o ficheiro de texto está incorreto?
@@ -236,7 +241,9 @@ int LookUp(binaryTree *root, char *address){
 		j=1;
 
 	}
-
+//1011101100110011
+//011101100110011
+//11101100110011
 	return lastHop;
 }
 
