@@ -1,2 +1,6 @@
 arvore binaria pois parece ser a mais obvia e eficiente
 PrintTable: Temos de percorrer varios nos da arvore. Como Percorrer os varios nos? Procura em largura, procura em profundidade?? Acho que a complexidade temporal de ambas é O(V+E) V:vertices E:arestas. O que nos importa é minimizar o tempo das coisas e nao tanto a memoria
+
+- guardar o texto de printTable num buffer para 2 prints adjacentes sem insert e delete imprimir logo (com flag de controlo)
+
+- prefixos iguais -> tem a certeza que quer inserir??

@@ -324,5 +324,72 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 //CompressTree, that receives as input the prefix tree of a prefix table and returns another prefix tree representing a prefix table with a smaller number of entries.
 binaryTree *CompressTree(binaryTree *root){
 
+	compressTreeRecursive(root, root, root->nextHop, 's');
+
 	return root;
 }
+
+int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction){
+	//se não for root compara com next Hop q veio de cima
+		//se for igual 
+			//se nao tiver filhos apaga-se e retorna o seu Hop
+			//se tiver pelo menos 1 filho mete seu Hop a -1 e envia left e right seu Hop
+		//se for diferente
+			//envia left e right seu hop
+	//se for root envia left e right seu hop
+	int l = -1, r = -1;
+	//bool l_exist = false, r_exist = false;
+	binaryTree *aux;
+	if(prev == root){
+		aux = root;
+		if(aux->left != NULL){
+			l = compressTreeRecursive(aux->left, root, aux->nextHop, 'l');
+		}
+		if(aux->right != NULL){
+			r = compressTreeRecursive(aux->right, root, aux->nextHop, 'r');
+		}
+
+	}else{
+		if(direction == 'l')
+			aux = prev->left;
+		else
+			aux = prev->right;
+		//Envia para a esquerda e direita com o Hop que vinha de cima
+		if(aux->nextHop == -1){
+			if(aux->left != NULL){
+				//l_exist = true;
+				l = compressTreeRecursive(aux->left, root, nextHop, 'l');
+			}
+			if(aux->right != NULL){
+				//r_exist = true;
+				r = compressTreeRecursive(aux->right, root, nextHop, 'r');
+			}
+			//Se algum filho existir e não se tiver apagado -> não se vai apagar tb
+			/*if((l_exist && l != -2) || (r_exist && r != -2)){
+				return aux->nextHop;
+			}else{
+
+			}*/
+			//se já não tem filhos apaga-se e retorna -2?
+			if(aux->left == NULL && aux->right == NULL){
+
+				free(aux);
+				if(direction == 'l'){
+					prev->left = NULL;
+				}
+				else{
+					prev->right = NULL;
+				}
+			}
+
+		}else{
+			//por implementar
+
+		}
+
+
+	}
+
+}
+
+
