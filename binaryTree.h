@@ -16,7 +16,8 @@ binaryTree *PrefixTree(FILE *fp);
 int getLevelCount(binaryTree *root);
 void printLevel(binaryTree *node, int level,int flag, char *prefix);
 void PrintTable(binaryTree *root);
-int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction);
+void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction);
+void freeTree(binaryTree *prev, binaryTree *root, char direction);
 
 
 int LookUp(binaryTree *root, char *address);

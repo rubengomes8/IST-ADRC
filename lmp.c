@@ -59,12 +59,13 @@ int main(int argc, char *argv[]){
 			strcpy(address, "\0");
 			
 		}else if(!strcasecmp(option, "c")){
-
-			printf("A implementar...\n");
+			
 			CompressTree(root);
 			
 		}else if(!strcasecmp(option, "e")){
 			//dar free's
+			freeTree(NULL, root, 's');
+			printf("\nPrograma terminado.\n");
 			exit=1;
 		}else{
 

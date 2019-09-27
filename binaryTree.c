@@ -167,7 +167,7 @@ void PrintTable(binaryTree *root){
 	char prefix[levelCount];
 	prefix[0]='\0';
 	
-	printf("%ld\n",strlen(prefix) );
+	//printf("%ld\n",strlen(prefix) );
 
 	printf("Tabela:\n");
 	printf("Prefixo | Nexthop \n");
@@ -324,12 +324,12 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 //CompressTree, that receives as input the prefix tree of a prefix table and returns another prefix tree representing a prefix table with a smaller number of entries.
 binaryTree *CompressTree(binaryTree *root){
 
-	compressTreeRecursive(root, root, root->nextHop, 's');
+	compressTreeRecursive(NULL, root, root->nextHop, 's');
 
 	return root;
 }
 
-int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction){
+void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction){
 	//se não for root compara com next Hop q veio de cima
 		//se for igual 
 			//se nao tiver filhos apaga-se e retorna o seu Hop
@@ -337,16 +337,15 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 		//se for diferente
 			//envia left e right seu hop
 	//se for root envia left e right seu hop
-	int l = -1, r = -1;
-	//bool l_exist = false, r_exist = false;
+
 	binaryTree *aux;
-	if(prev == root){
+	if(prev == NULL){ //1ª invocação -> é root
 		aux = root;
 		if(aux->left != NULL){
-			l = compressTreeRecursive(aux, root, aux->nextHop, 'l');
+			compressTreeRecursive(aux, root, aux->nextHop, 'l');
 		}
 		if(aux->right != NULL){
-			r = compressTreeRecursive(aux, root, aux->nextHop, 'r');
+			compressTreeRecursive(aux, root, aux->nextHop, 'r');
 		}
 
 	}else{
@@ -359,19 +358,14 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 		if(aux->nextHop == -1){
 			if(aux->left != NULL){
 				//l_exist = true;
-				l = compressTreeRecursive(aux, root, nextHop, 'l');
+				compressTreeRecursive(aux, root, nextHop, 'l');
 			}
 			if(aux->right != NULL){
 				//r_exist = true;
-				r = compressTreeRecursive(aux, root, nextHop, 'r');
+				compressTreeRecursive(aux, root, nextHop, 'r');
 			}
-			//Se algum filho existir e não se tiver apagado -> não se vai apagar tb
-			/*if((l_exist && l != -2) || (r_exist && r != -2)){
-				return aux->nextHop;
-			}else{
 
-			}*/
-			//se já não tem filhos apaga-se e retorna -2?
+			//se já não tem filhos apaga-se
 			if(aux->left == NULL && aux->right == NULL){
 
 				free(aux);
@@ -400,11 +394,11 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 					aux->nextHop = -1;
 					if(aux->left != NULL){
 						//l_exist = true;
-						l = compressTreeRecursive(aux, root, nextHop, 'l');
+						compressTreeRecursive(aux, root, nextHop, 'l');
 					}
 					if(aux->right != NULL){
 						//r_exist = true;
-						r = compressTreeRecursive(aux, root, nextHop, 'r');
+						compressTreeRecursive(aux, root, nextHop, 'r');
 					}
 
 				}
@@ -414,11 +408,11 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 				//diferente de cima
 				if(aux->left != NULL){
 					//l_exist = true;
-					l = compressTreeRecursive(aux, root, aux->nextHop, 'l');
+					compressTreeRecursive(aux, root, aux->nextHop, 'l');
 				}
 				if(aux->right != NULL){
 					//r_exist = true;
-					r = compressTreeRecursive(aux, root, aux->nextHop, 'r');
+					compressTreeRecursive(aux, root, aux->nextHop, 'r');
 				}
 
 			} 
@@ -428,6 +422,30 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 
 	}
 
+}
+
+//Faz free dos nós recursivamente
+void freeTree(binaryTree *prev, binaryTree *root, char direction){
+
+	binaryTree *cur;
+
+	if(prev == NULL){ //root
+		cur = root;
+	} 
+	else{
+		if(direction == 'l')
+			cur = prev->left;
+		else
+			cur = prev->right;
+	}
+	
+
+	if(cur->left != NULL)
+		freeTree(cur, root, 'l');
+	if(cur->right != NULL)
+		freeTree(cur, root, 'r');
+
+	free(cur);
 }
 
 
