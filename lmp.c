@@ -60,7 +60,8 @@ int main(int argc, char *argv[]){
 			
 		}else if(!strcasecmp(option, "c")){
 
-			printf("Por implementar...\n");
+			printf("A implementar...\n");
+			CompressTree(root);
 			
 		}else if(!strcasecmp(option, "e")){
 			//dar free's

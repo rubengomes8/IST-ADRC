@@ -343,13 +343,14 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 	if(prev == root){
 		aux = root;
 		if(aux->left != NULL){
-			l = compressTreeRecursive(aux->left, root, aux->nextHop, 'l');
+			l = compressTreeRecursive(aux, root, aux->nextHop, 'l');
 		}
 		if(aux->right != NULL){
-			r = compressTreeRecursive(aux->right, root, aux->nextHop, 'r');
+			r = compressTreeRecursive(aux, root, aux->nextHop, 'r');
 		}
 
 	}else{
+
 		if(direction == 'l')
 			aux = prev->left;
 		else
@@ -358,11 +359,11 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 		if(aux->nextHop == -1){
 			if(aux->left != NULL){
 				//l_exist = true;
-				l = compressTreeRecursive(aux->left, root, nextHop, 'l');
+				l = compressTreeRecursive(aux, root, nextHop, 'l');
 			}
 			if(aux->right != NULL){
 				//r_exist = true;
-				r = compressTreeRecursive(aux->right, root, nextHop, 'r');
+				r = compressTreeRecursive(aux, root, nextHop, 'r');
 			}
 			//Se algum filho existir e não se tiver apagado -> não se vai apagar tb
 			/*if((l_exist && l != -2) || (r_exist && r != -2)){
@@ -384,6 +385,43 @@ int compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char 
 
 		}else{
 			//por implementar
+			if(aux->nextHop==nextHop){
+				if(aux->left==NULL && aux->right==NULL){
+					free(aux);
+					if(direction == 'l'){
+						prev->left = NULL;
+					}
+					else{
+						prev->right = NULL;
+					}
+				}
+				else
+				{
+					aux->nextHop = -1;
+					if(aux->left != NULL){
+						//l_exist = true;
+						l = compressTreeRecursive(aux, root, nextHop, 'l');
+					}
+					if(aux->right != NULL){
+						//r_exist = true;
+						r = compressTreeRecursive(aux, root, nextHop, 'r');
+					}
+
+				}
+				
+			}
+			else{
+				//diferente de cima
+				if(aux->left != NULL){
+					//l_exist = true;
+					l = compressTreeRecursive(aux, root, aux->nextHop, 'l');
+				}
+				if(aux->right != NULL){
+					//r_exist = true;
+					r = compressTreeRecursive(aux, root, aux->nextHop, 'r');
+				}
+
+			} 
 
 		}
 
