@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 		else if(!strcasecmp(option, "l")){
 
 			printf("- Digite o endereço de 16 bits sem espaços\n");
-			fgets(address, 17, stdin);
+			fgets(address, 18, stdin);
             address[16] = '\0';
             //printf("address: %s\n", address);
 			nextHop = LookUp(root, address);
