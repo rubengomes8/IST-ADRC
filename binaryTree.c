@@ -325,7 +325,8 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 binaryTree *CompressTree(binaryTree *root){
 
 	compressTreeRecursive(NULL, root, root->nextHop, 's');
-
+	 clusterTree(root);
+	
 	return root;
 }
 
@@ -422,6 +423,35 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 
 	}
 
+}
+
+int clusterTree(binaryTree * node){
+	int l, r;
+	if(node->left != NULL){
+		
+		l=clusterTree(node->left);
+	}
+	if(node->right != NULL){
+		
+		r=clusterTree(node->right);
+	}
+	//se os nextHops dos filhos, l e r forem iguais 
+	if(node->nextHop==l || node->nextHop==-1){
+		if(r==l){
+			printf("%d %d\n", r, l);
+			printf("%d\n",  node->nextHop);			
+			if(node->left->left==NULL && node->left->right==NULL){
+				printf("adssfd\n");
+				free(node->left);
+				free(node->right);
+				node->nextHop=r;		
+			}
+			else{
+				node->nextHop=-1;
+			}
+		}
+	}
+	return node->nextHop;
 }
 
 //Faz free dos nós recursivamente

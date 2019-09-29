@@ -24,3 +24,5 @@ int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);
 binaryTree *DeletePrefix(binaryTree *root, char *prefix);
 binaryTree *CompressTree(binaryTree *root);
+
+int clusterTree(binaryTree * node);
