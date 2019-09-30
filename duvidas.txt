@@ -1,1 +1,3 @@
 - Recolher e apresentar vários algoritmos de prefix trees
+
+- é suposto fazer agreggate na root??

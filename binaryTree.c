@@ -325,7 +325,7 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 binaryTree *CompressTree(binaryTree *root){
 
 	compressTreeRecursive(NULL, root, root->nextHop, 's');
-	 clusterTree(root);
+	//clusterTree(root);
 	
 	return root;
 }
@@ -351,10 +351,30 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 
 	}else{
 
+		
 		if(direction == 'l')
 			aux = prev->left;
 		else
 			aux = prev->right;
+
+
+		/************************************************* Fui eu q adicionei para esquecer o clusterTree ***************************************************/
+		if(aux->left != NULL && aux->right != NULL && aux->left->nextHop == aux->right->nextHop){
+			if(aux->left->left == NULL && aux->left->right == NULL && aux->right->left == NULL && aux->right->right == NULL){ //apaga folhas parentes com mesmo hop
+				aux->nextHop = aux->left->nextHop;
+				free(aux->left);
+				free(aux->right);
+				aux->left = NULL;
+				aux->right = NULL;
+			}else{
+				aux->nextHop=aux->left->nextHop;
+				aux->left->nextHop = -1;
+				aux->right->nextHop = -1;
+			}
+		}
+		/***************************************************************************************************************************************************/
+
+
 		//Envia para a esquerda e direita com o Hop que vinha de cima
 		if(aux->nextHop == -1){
 			if(aux->left != NULL){
