@@ -130,14 +130,14 @@ void printLevel(binaryTree *node, int level, int flag, char *prefix)
 		if(node->nextHop!=-1)
 		{
 			if (strlen(prefix)==0)
-				printf("  e\t\t");
+				printf(" |          e ");
 			else
 			{
 				//printf("%d |\t", flag);
-				printf(" %s\t\t", prefix);
+				printf("| %10s ", prefix);
 			}
 			
-        	printf("%d\n ", node->nextHop);
+        	printf("|%d\n ", node->nextHop);
 			
 		}
     }   
@@ -168,9 +168,11 @@ void PrintTable(binaryTree *root){
 	prefix[0]='\0';
 	
 	//printf("%ld\n",strlen(prefix) );
-
-	printf("Tabela:\n");
-	printf("Prefixo | Nexthop \n");
+	if(levelCount==0){
+		printf("Tabela vazia\n");
+	}
+	printf("\tTabela:\n");
+	printf(" |Prefixo     | Nexthop \n");
     for (i = 0; i < levelCount; i++)
     {
 		
