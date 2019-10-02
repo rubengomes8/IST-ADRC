@@ -61,7 +61,7 @@ binaryTree *insertNewNode(char *prefix, binaryTree *root){
 		}else{
 
 			//Significa que o ficheiro de texto está incorreto?
-			printf("Ficheiro de texto contém prefixos invalidos, com caracteres diferentes de 0 e de 1\n");
+			printf("Prefixos invalidos com caracteres diferentes de 0 e de 1\n");
 			exit(-1);
 		}
 
@@ -130,11 +130,11 @@ void printLevel(binaryTree *node, int level, int flag, char *prefix)
 		if(node->nextHop!=-1)
 		{
 			if (strlen(prefix)==0)
-				printf(" |          e ");
+				printf("           e ");
 			else
 			{
 				//printf("%d |\t", flag);
-				printf("| %10s ", prefix);
+				printf(" %10s ", prefix);
 			}
 			
         	printf("|%d\n ", node->nextHop);
@@ -171,8 +171,8 @@ void PrintTable(binaryTree *root){
 	if(levelCount==0){
 		printf("Tabela vazia\n");
 	}
-	printf("\tTabela:\n");
-	printf(" |Prefixo     | Nexthop \n");
+	//printf("\tTabela:\n");
+	printf("      Prefixo|Nexthop \n");
     for (i = 0; i < levelCount; i++)
     {
 		
@@ -298,7 +298,7 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 		}else{
 
 			//Significa que o ficheiro de texto está incorreto?
-			printf("Ficheiro de texto contém prefixos invalidos, com caracteres diferentes de 0 e de 1\n");
+			printf("Prefixos invalidos com caracteres diferentes de 0 e de 1\n");
 			exit(-1);
 		}
 
@@ -344,6 +344,24 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 	binaryTree *aux;
 	if(prev == NULL){ //1ª invocação -> é root
 		aux = root;
+
+		/************************************************* Fui eu q adicionei para esquecer o clusterTree ***************************************************/
+
+		if(aux->left != NULL && aux->right != NULL && aux->left->nextHop == aux->right->nextHop && aux->left->nextHop != -1){
+			if(aux->left->left == NULL && aux->left->right == NULL && aux->right->left == NULL && aux->right->right == NULL){ //apaga folhas parentes com mesmo hop
+				aux->nextHop = aux->left->nextHop;
+				free(aux->left);
+				free(aux->right);
+				aux->left = NULL;
+				aux->right = NULL;
+			}else{
+				aux->nextHop=aux->left->nextHop;
+				aux->left->nextHop = -1;
+				aux->right->nextHop = -1;
+			}
+		}
+		/***************************************************************************************************************************************************/
+
 		if(aux->left != NULL){
 			compressTreeRecursive(aux, root, aux->nextHop, 'l');
 		}
@@ -361,7 +379,7 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 
 
 		/************************************************* Fui eu q adicionei para esquecer o clusterTree ***************************************************/
-		if(aux->left != NULL && aux->right != NULL && aux->left->nextHop == aux->right->nextHop){
+		if(aux->left != NULL && aux->right != NULL && aux->left->nextHop == aux->right->nextHop && aux->left->nextHop != -1){
 			if(aux->left->left == NULL && aux->left->right == NULL && aux->right->left == NULL && aux->right->right == NULL){ //apaga folhas parentes com mesmo hop
 				aux->nextHop = aux->left->nextHop;
 				free(aux->left);
@@ -446,7 +464,7 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 	}
 
 }
-
+/*
 int clusterTree(binaryTree * node){
 	int l, r;
 	if(node->left != NULL){
@@ -474,7 +492,7 @@ int clusterTree(binaryTree * node){
 		}
 	}
 	return node->nextHop;
-}
+}*/
 
 //Faz free dos nós recursivamente
 void freeTree(binaryTree *prev, binaryTree *root, char direction){
