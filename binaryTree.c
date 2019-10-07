@@ -262,9 +262,13 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 	//se for folha faz free do node e mete o pai a apontar para NULL, se não for apenas mete o nextHop a -1
 	//ter em atenção que o prefixo pode não existir
 	binaryTree *aux = root;
+	binaryTree *cur;
 	binaryTree *prev;
 	int i = 1;
 	char flag;
+	binaryTree *lastWithHop = root;
+	char *lastPrefix = (char *)malloc(strlen(prefix)*sizeof(char)+1);
+	
 
 
 	while(strlen(prefix) > 0)
@@ -272,6 +276,10 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 		if(prefix[0] == '0'){
 
 			prev = aux;
+			if(prev->nextHop != -1){
+				lastWithHop = prev;
+				strcpy(lastPrefix, prefix);
+			}
 			if(aux->left != NULL)
 			{
 				aux = aux->left;
@@ -285,6 +293,10 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 		}else if (prefix[0] == '1'){
 
 			prev = aux;
+			if(prev->nextHop != -1){
+				lastWithHop = prev;
+				strcpy(lastPrefix, prefix);
+			}
 			if (aux->right != NULL){
 				aux = aux->right;
 				flag = 'r';
@@ -318,8 +330,38 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 			prev->right = NULL;
 		free(aux);
 	} else{
-		aux->nextHop = -1;
+		i=1;
+		if(prev->nextHop == -1){
+			aux = lastWithHop;
+			while(strlen(lastPrefix) > 0){
+				if(lastPrefix[0] == '0'){
+					aux = aux->left;
+				}else if(lastPrefix[0] == '1'){
+					aux = aux->right;
+				}
+
+				while(lastPrefix[i] != '\0'){
+					lastPrefix[i-1] =  lastPrefix[i];
+					i++;
+				}
+				lastPrefix[i-1] = '\0';
+				i=1;
+
+				if(lastPrefix[0] == '0'){
+					cur = aux->left;
+					free(aux);
+				}else if(lastPrefix[0] == '1'){
+					cur = aux->right;
+					free(aux);
+				}
+				aux=cur;
+			}
+		}else{
+			aux->nextHop = -1;
+		}
+		
 	}
+	free(lastPrefix);
 	return root;
 }
 
@@ -518,4 +560,20 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction){
 	free(cur);
 }
 
+void compressTreeOptimal(binaryTree *root){
 
+	//passo 1: cada nó passa a ter 0 ou 2 filhos root to leaves
+
+	//passo 2: leaves to root y = a inters b if a inters b != 0 else y = a union b
+
+	//passo 3: root to leaves
+}
+/*
+void Step1(binaryTree *prev, binaryTree* root, char direction){
+	binaryTree *aux;
+	if(prev == NULL){ //root
+
+	}else{
+
+	}
+ }*/

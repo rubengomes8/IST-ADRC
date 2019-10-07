@@ -18,11 +18,10 @@ void printLevel(binaryTree *node, int level,int flag, char *prefix);
 void PrintTable(binaryTree *root);
 void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction);
 void freeTree(binaryTree *prev, binaryTree *root, char direction);
+void compressTreeOptimal(binaryTree *root);
 
 
 int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);
 binaryTree *DeletePrefix(binaryTree *root, char *prefix);
 binaryTree *CompressTree(binaryTree *root);
-
-int clusterTree(binaryTree * node);
