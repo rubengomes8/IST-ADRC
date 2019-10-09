@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 typedef struct _binaryTree binaryTree;
+typedef struct _hopList hopList;
 
 
 binaryTree *newNode(int nextHop);
@@ -18,8 +19,9 @@ void printLevel(binaryTree *node, int level,int flag, char *prefix);
 void PrintTable(binaryTree *root);
 void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction);
 void freeTree(binaryTree *prev, binaryTree *root, char direction);
-void compressTreeOptimal(binaryTree *root);
 
+void compressTreeOptimal(binaryTree *root);
+void Step1(binaryTree* root, int hop);
 
 int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);

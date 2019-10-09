@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 	
 	do{
 		printf("\nOPCOES:\n");
-		printf("- Imprimir tabela                  --> premir p\n- Procurar next hop de um endereço --> premir l\n- Inserir uma entrada na tabela    --> premir i\n- Apagar uma entrada da tabela     --> premir d\n- Comprimir a tabela               --> premir c\n- Sair                             --> premir e\n\n");
+		printf("- Imprimir tabela                  --> premir p\n- Procurar next hop de um endereço --> premir l\n- Inserir uma entrada na tabela    --> premir i\n- Apagar uma entrada da tabela     --> premir d\n- Comprimir a tabela               --> premir c\nCompressão ótima                   --> premir o\n- Sair                             --> premir e\n\n");
 
 
 		//fflush(stdin);
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
         while ((getchar()) != '\n'){
     
         }
-        
+        free(NULL);
         option[1]='\0';
 		//printf("%s\n", option);
 		if(!strcasecmp(option, "p")){
@@ -85,14 +85,18 @@ int main(int argc, char *argv[]){
 			}
 			DeletePrefix(root, address);
 			strcpy(address, "\0");
-			
-		}else if(!strcasecmp(option, "c")){
+		
+		}else if(!strcasecmp(option, "o")){
+			compressTreeOptimal(root);
+
+		}
+		else if(!strcasecmp(option, "c")){
 			
 			CompressTree(root);
 			
 		}else if(!strcasecmp(option, "e")){
 			//dar free's
-			freeTree(NULL, root, 's');
+			//freeTree(NULL, root, 's');
 			printf("\nPrograma terminado.\n");
 			exit=1;
 		}else{

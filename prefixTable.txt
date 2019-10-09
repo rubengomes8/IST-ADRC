@@ -1,4 +1,4 @@
 Prefix	NextHop
 e	1
-0   5
-001 7
+0   2
+0001 3

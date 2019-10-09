@@ -8,6 +8,11 @@ struct _binaryTree{
 	struct _binaryTree *right;
 };
 
+struct _hopList{
+	int hop;
+	struct _hopList *next;
+}
+
 
 binaryTree *newNode(int nextHop){
 
@@ -256,7 +261,7 @@ binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop){
 	new->nextHop = nextHop;
 	return root;
 }
-
+/*
 //DeletePrefix, that receives as input a prefix tree and a prefix and returns a prefix tree with the prefix withdrawn;
 binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 	//se for folha faz free do node e mete o pai a apontar para NULL, se não for apenas mete o nextHop a -1
@@ -364,6 +369,106 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 	free(lastPrefix);
 	return root;
 }
+*/
+
+binaryTree *DeletePrefix(binaryTree *root, char *prefix){
+	char px[strlen(prefix)];
+	printf("prefixo de entrada %s, tamanho %d\n" , prefix, strlen(prefix));
+	binaryTree * ret;
+	int l=0,r=0;
+	if(strlen(prefix) > 0 ){
+		if(prefix[0]=='0'){
+			if(root->left!=NULL){
+				strcpy(px,prefix+1);
+				printf(" prefixo: %s\n",prefix);
+				printf(" %s\n",px);
+				ret=DeletePrefix(root->left,px);
+				l=1;
+			}
+			else
+			{
+				printf("prefixo não encontrado\n");
+				return(root);
+			}
+			
+		}
+		else if(prefix[0]=='1'){
+			if(root->right!=NULL){
+				strcpy(px,prefix+1);
+				printf(" prefixo: %s\n",prefix);
+				printf(" %s\n",px);
+				ret=DeletePrefix(root->right,px);
+				r=1;
+			}
+			else
+			{
+				printf("prefixo não encontrado\n");
+				return(root);
+			}
+		}
+	}
+
+	if(strlen(prefix)==0){
+		if(root->left==NULL && root->right==NULL){
+			printf("apaguei prefixo: %d", root->nextHop);
+			free(root);	
+			root = NULL; //?????
+			return NULL;
+		}
+		else{
+			root->nextHop=-1;
+			return root;
+		}
+	}
+
+	if(ret==NULL && root->nextHop==-1){
+		if(l==1){
+			if(root->right == NULL)
+			{
+				//free(root->left);
+				root->left=NULL;
+				free(root);
+				root=NULL; //????
+				return NULL;
+			}else{
+				root->left = NULL;
+				return root;
+			}
+
+		}
+		if(r==1){
+			if(root->left == NULL){
+				//free(root->right);
+				root->right=NULL;
+				free(root);
+				root=NULL;//????
+				return NULL;
+			}else{
+				root->right = NULL;
+				return root;
+			}
+			
+		}
+	}
+	else if(ret==NULL){
+		if(l==1){
+			//free(root->left); ???
+			root->left=NULL;
+			return root;
+		}
+		if(r==1){
+			//free(root->right);
+			root->right=NULL;
+			return root;
+		}
+
+	}
+	
+}
+	
+
+
+	
 
 //CompressTree, that receives as input the prefix tree of a prefix table and returns another prefix tree representing a prefix table with a smaller number of entries.
 binaryTree *CompressTree(binaryTree *root){
@@ -563,17 +668,58 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction){
 void compressTreeOptimal(binaryTree *root){
 
 	//passo 1: cada nó passa a ter 0 ou 2 filhos root to leaves
-
+	Step1(root, -2);
 	//passo 2: leaves to root y = a inters b if a inters b != 0 else y = a union b
 
 	//passo 3: root to leaves
 }
-/*
-void Step1(binaryTree *prev, binaryTree* root, char direction){
-	binaryTree *aux;
-	if(prev == NULL){ //root
 
+void Step1(binaryTree* root, int hop){
+
+	if(root->nextHop != -1)
+		hop = root->nextHop;
+
+	if(root->left !=NULL && root->right == NULL){
+		root->right = newNode(hop);
+		Step1(root->left, hop);
+		root->nextHop = 0;
+	}else if(root->left==NULL && root->right != NULL){
+		root->left = newNode(hop);
+		Step1(root->right, hop);
+		root->nextHop = 0;
+	}else if(root->left != NULL && root->right != NULL){
+		Step1(root->left, hop);
+		Step1(root->right, hop);
+		root->nextHop = 0;
 	}else{
-
+		//não tem filhos
 	}
- }*/
+
+	//if(root->left != NULL || root->right != NULL)
+	//	root->nextHop = 0;
+
+}
+/*
+hopList * Step2( binaryTree *root){
+	hopList *list_head_left = NULL;
+	hopList *list_head_right = NULL;
+	hopList *list_head = NULL;
+	//post order - left right root
+
+	if(root->left->left != NULL){
+		list_head_left = Step2(root->left);
+	}
+	else{//nível 2
+		
+		root->left->nextHop;
+	}
+
+	if(root->right->left != NULL){
+		list_head_right = Step2(root->right);
+	}
+
+
+
+}
+*/
+
