@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 typedef struct _binaryTree binaryTree;
 typedef struct _hopList hopList;
@@ -21,7 +22,8 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 void freeTree(binaryTree *prev, binaryTree *root, char direction);
 
 void compressTreeOptimal(binaryTree *root);
-void Step1(binaryTree* root, int hop);
+hopList * Step1_and_2(binaryTree* root, int hop);
+hopList* new_hop(int hop);
 
 int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);

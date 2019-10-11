@@ -11,7 +11,7 @@ struct _binaryTree{
 struct _hopList{
 	int hop;
 	struct _hopList *next;
-}
+};
 
 
 binaryTree *newNode(int nextHop){
@@ -668,37 +668,71 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction){
 void compressTreeOptimal(binaryTree *root){
 
 	//passo 1: cada nó passa a ter 0 ou 2 filhos root to leaves
-	Step1(root, -2);
+	Step1_and_2(root, -2);
 	//passo 2: leaves to root y = a inters b if a inters b != 0 else y = a union b
 
 	//passo 3: root to leaves
 }
 
-void Step1(binaryTree* root, int hop){
+hopList * Step1_and_2(binaryTree* root, int hop){
+
+	hopList * my_hops=NULL;
+	hopList * hops_left=NULL;
+	hopList * hops_right=NULL;
 
 	if(root->nextHop != -1)
 		hop = root->nextHop;
 
 	if(root->left !=NULL && root->right == NULL){
 		root->right = newNode(hop);
-		Step1(root->left, hop);
+		hops_left=Step1_and_2(root->left, hop);
+		hops_right=new_hop(root->nextHop);
 		root->nextHop = 0;
 	}else if(root->left==NULL && root->right != NULL){
 		root->left = newNode(hop);
-		Step1(root->right, hop);
+		hops_right=Step1_and_2(root->right, hop);
+		hops_left=new_hop(root->nextHop);
 		root->nextHop = 0;
 	}else if(root->left != NULL && root->right != NULL){
-		Step1(root->left, hop);
-		Step1(root->right, hop);
+		hops_left=Step1_and_2(root->left, hop);
+		hops_right=Step1_and_2(root->right, hop);
 		root->nextHop = 0;
 	}else{
-		//não tem filhos
+		//não tem filhos		
+		return new_hop(root->nextHop);
 	}
+
 
 	//if(root->left != NULL || root->right != NULL)
 	//	root->nextHop = 0;
 
 }
+
+hopList* new_hop(int hop){
+	struct _hopList *node = (struct _hopList*) malloc(sizeof(struct _hopList));
+	node->hop = hop;
+	return node;
+}
+
+
+hopList* percolate(hopList *left, hopList *right){
+	
+	hopList *aux_left=left;
+	hopList *aux_right=right;
+	hopList *intersectList=NULL;
+	hopList *unionList=NULL;
+	hopList *new_node=NULL;
+	bool intersected=false;
+
+	while( aux_left!=NULL && aux_right!=NULL){
+		if(intersected==false){
+			if(aux_left->hop < aux_right->hop){
+				new_node=new_hop(aux_left->hop);
+				if()
+			}
+		}
+	}
+} 
 /*
 hopList * Step2( binaryTree *root){
 	hopList *list_head_left = NULL;
