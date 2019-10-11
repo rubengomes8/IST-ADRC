@@ -24,6 +24,7 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction);
 void compressTreeOptimal(binaryTree *root);
 hopList * Step1_and_2(binaryTree* root, int hop);
 hopList* new_hop(int hop);
+hopList* percolate(hopList *left, hopList *right);
 
 int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);

@@ -666,9 +666,18 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction){
 }
 
 void compressTreeOptimal(binaryTree *root){
-
+	hopList*hop_head;
 	//passo 1: cada nó passa a ter 0 ou 2 filhos root to leaves
-	Step1_and_2(root, -2);
+	hop_head=Step1_and_2(root, -2);
+	hopList *ax=hop_head;
+	
+	printf("hop_head\n");
+	while (ax!=NULL)
+	{
+		printf("%d, ",ax->hop);
+		ax=ax->next;
+	}
+	printf("\n");
 	//passo 2: leaves to root y = a inters b if a inters b != 0 else y = a union b
 
 	//passo 3: root to leaves
@@ -686,12 +695,12 @@ hopList * Step1_and_2(binaryTree* root, int hop){
 	if(root->left !=NULL && root->right == NULL){
 		root->right = newNode(hop);
 		hops_left=Step1_and_2(root->left, hop);
-		hops_right=new_hop(root->nextHop);
+		hops_right=new_hop(hop);
 		root->nextHop = 0;
 	}else if(root->left==NULL && root->right != NULL){
 		root->left = newNode(hop);
 		hops_right=Step1_and_2(root->right, hop);
-		hops_left=new_hop(root->nextHop);
+		hops_left=new_hop(hop);
 		root->nextHop = 0;
 	}else if(root->left != NULL && root->right != NULL){
 		hops_left=Step1_and_2(root->left, hop);
@@ -702,9 +711,8 @@ hopList * Step1_and_2(binaryTree* root, int hop){
 		return new_hop(root->nextHop);
 	}
 
-
-	//if(root->left != NULL || root->right != NULL)
-	//	root->nextHop = 0;
+	return percolate(hops_left,hops_right);
+	
 
 }
 
@@ -719,19 +727,142 @@ hopList* percolate(hopList *left, hopList *right){
 	
 	hopList *aux_left=left;
 	hopList *aux_right=right;
-	hopList *intersectList=NULL;
-	hopList *unionList=NULL;
+	hopList *intersectList=NULL, *auxIntList=NULL;
+	hopList *unionList=NULL, *auxUnList;
 	hopList *new_node=NULL;
 	bool intersected=false;
+
+	hopList *ax=NULL;
+	ax=left;
+	printf("Left\n");
+	while (ax!=NULL)
+	{
+		printf("%d, ",ax->hop);
+		ax=ax->next;
+	}
+	printf("\n");
+	printf("Right\n");
+	ax=right;
+	while (ax!=NULL)
+	{
+		printf("%d, ",ax->hop);
+		ax=ax->next;
+	}
+	printf("\n");
 
 	while( aux_left!=NULL && aux_right!=NULL){
 		if(intersected==false){
 			if(aux_left->hop < aux_right->hop){
 				new_node=new_hop(aux_left->hop);
-				if()
+				
+				if(intersectList==NULL){
+					intersectList=new_node;
+					auxIntList=new_node;
+				}
+				else
+				{
+					auxIntList->next=new_node;
+					auxIntList=new_node;
+				}
+				aux_left=aux_left->next;
 			}
+			else if(aux_left->hop > aux_right->hop){
+				new_node=new_hop(aux_right->hop);
+				
+				if(intersectList==NULL){
+					intersectList=new_node;
+					auxIntList=new_node;
+				}
+				else
+				{
+					auxIntList->next=new_node;
+					auxIntList=new_node;
+				}
+				aux_right=aux_right->next;
+			}
+			else if (aux_left->hop == aux_right->hop)
+			{
+				intersected=true;
+				new_node=new_hop(aux_right->hop);
+				if(unionList==NULL){
+					unionList=new_node;
+					auxUnList=new_node;
+				}
+				else
+				{
+					auxUnList->next=new_node;
+					auxUnList=new_node;
+				}
+				aux_left=aux_left->next;
+				aux_right=aux_right->next;
+
+			}				
+			
+		}else if(intersected==true){
+			if(aux_left->hop < aux_right->hop){
+				aux_left=aux_left->next;
+			}
+			else if(aux_left->hop > aux_right->hop){
+				aux_right=aux_right->next;
+			}
+			else if (aux_left->hop== aux_right->hop)
+			{
+				new_node=new_hop(aux_right->hop);
+				if(unionList==NULL){
+					unionList=new_node;
+					auxUnList=new_node;
+				}
+				else
+				{
+					auxUnList->next=new_node;
+					auxUnList=new_node;
+				}
+				aux_left=aux_left->next;
+				aux_right=aux_right->next;
+			}
+			
 		}
 	}
+	while (aux_left!=NULL)
+	{
+		new_node=new_hop(aux_left->hop);
+		auxIntList->next=new_node;
+		auxIntList=new_node;
+		aux_left=aux_left->next;
+	}
+	while (aux_right!=NULL)
+	{
+		new_node=new_hop(aux_right->hop);
+		auxIntList->next=new_node;
+		auxIntList=new_node;
+		aux_right=aux_right->next;
+	}
+
+	
+	ax=intersectList;
+	while (ax!=NULL)
+	{
+		printf("intersect %d, ",ax->hop);
+		ax=ax->next;
+	}
+	printf("\n");
+	ax=unionList;
+	while (ax!=NULL)
+	{
+		printf("union %d, ",ax->hop);
+		ax=ax->next;
+	}
+	
+	
+
+	if(unionList==NULL){
+		return intersectList;
+	}
+	else
+	{
+		return unionList;
+	}
+	
 } 
 /*
 hopList * Step2( binaryTree *root){
