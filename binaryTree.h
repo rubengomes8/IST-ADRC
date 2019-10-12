@@ -23,6 +23,10 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction);
 
 void compressTreeOptimal(binaryTree *root);
 hopList * Step1_and_2(binaryTree* root, int hop);
+void Step3(binaryTree *prev, binaryTree *root, int hop, char direction);
+bool checkHopInMyList(hopList *hops, int hop);
+void freeHopList(binaryTree *node);
+void freeIntersectedList(hopList *node);
 hopList* new_hop(int hop);
 hopList* percolate(hopList *left, hopList *right);
 
