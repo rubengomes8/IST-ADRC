@@ -669,7 +669,31 @@ void freeTree(binaryTree *prev, binaryTree *root, char direction){
 	free(cur);
 }
 
-void compressTreeOptimal(binaryTree *root){
+//Faz free do hops list do nós
+void freeTreeHops(binaryTree *prev, binaryTree *root, char direction){
+
+	binaryTree *cur;
+
+	if(prev == NULL){ //root
+		cur = root;
+	} 
+	else{
+		if(direction == 'l')
+			cur = prev->left;
+		else
+			cur = prev->right;
+	}
+	
+
+	if(cur->left != NULL)
+		freeTree(cur, root, 'l');
+	if(cur->right != NULL)
+		freeTree(cur, root, 'r');
+
+	freeHopList(cur);
+}
+
+binaryTree * compressTreeOptimal(binaryTree *root){
 	//passo 1: cada nó passa a ter 0 ou 2 filhos root to leaves
 	//e passo 2: leaves to root y = a inters b if a inters b != 0 else y = a union b
 	root->head_hops=Step1_and_2(root, -2);
@@ -684,7 +708,10 @@ void compressTreeOptimal(binaryTree *root){
 	printf("\n");
 
 	//passo 3: root to leaves
+	printf("aquiwe\n");
 	Step3(NULL, root, root->nextHop, 's');
+
+	return root;
 }
 
 hopList * Step1_and_2(binaryTree* root, int hop){
@@ -751,7 +778,7 @@ void Step3(binaryTree *prev, binaryTree *root, int hop, char direction){
 
 		}else{ //hopInList == true -> apaga-se
 			if(aux->right == NULL && aux->left == NULL){ //elimina o nó pq é folha
-				free(aux);
+				free(aux); //pai tem de apontar para NULL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				if(direction == 'l')
 					prev->left = NULL;
 				else if(direction == 'r')
@@ -768,7 +795,7 @@ void Step3(binaryTree *prev, binaryTree *root, int hop, char direction){
 
 	}
 
-	freeHopList(aux);
+	//freeHopList(aux);
 	/*******************************************Verificar se ainda tem filhos ******************************************************/
 	if(prev != NULL){
 		if(aux->left == NULL && aux->right == NULL && aux->nextHop == -1){
@@ -825,6 +852,7 @@ void freeIntersectedList(hopList *node){
 hopList* new_hop(int hop){
 	struct _hopList *node = (struct _hopList*) malloc(sizeof(struct _hopList));
 	node->hop = hop;
+	node->next=NULL;
 	return node;
 }
 
@@ -940,20 +968,30 @@ hopList* percolate(hopList *left, hopList *right){
 	while (aux_left!=NULL)
 	{
 		new_node=new_hop(aux_left->hop);
-		auxIntList->next=new_node;
-		auxIntList=new_node;
+		if(auxIntList!=NULL){
+			auxIntList->next=new_node;
+			auxIntList=new_node;
+		}
+		else{
+			auxIntList=new_node;
+		}
 		aux_left=aux_left->next;
 	}
 
 	while (aux_right!=NULL)
 	{
 		new_node=new_hop(aux_right->hop);
-		auxIntList->next=new_node;
-		auxIntList=new_node;
+		if(auxIntList!=NULL){
+			auxIntList->next=new_node;
+			auxIntList=new_node;
+		}
+		else{
+			auxIntList=new_node;
+		}
 		aux_right=aux_right->next;
 	}
 
-	
+	/*
 	ax=intersectList;
 	while (ax!=NULL)
 	{
@@ -968,7 +1006,7 @@ hopList* percolate(hopList *left, hopList *right){
 		printf("union %d, ",ax->hop);
 		ax=ax->next;
 	}
-	
+	*/
 	
 
 	if(unionList==NULL){

@@ -20,8 +20,9 @@ void printLevel(binaryTree *node, int level,int flag, char *prefix);
 void PrintTable(binaryTree *root);
 void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction);
 void freeTree(binaryTree *prev, binaryTree *root, char direction);
+void freeTreeHops(binaryTree *prev, binaryTree *root, char direction);
 
-void compressTreeOptimal(binaryTree *root);
+binaryTree * compressTreeOptimal(binaryTree *root);
 hopList * Step1_and_2(binaryTree* root, int hop);
 void Step3(binaryTree *prev, binaryTree *root, int hop, char direction);
 bool checkHopInMyList(hopList *hops, int hop);

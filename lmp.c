@@ -87,7 +87,8 @@ int main(int argc, char *argv[]){
 			strcpy(address, "\0");
 		
 		}else if(!strcasecmp(option, "o")){
-			compressTreeOptimal(root);
+			root=compressTreeOptimal(root);
+			//freeTreeHops(NULL,root,'s');
 
 		}
 		else if(!strcasecmp(option, "c")){
