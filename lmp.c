@@ -46,17 +46,23 @@ int main(int argc, char *argv[]){
 		else if(!strcasecmp(option, "l")){
 
 			printf("- Digite o endereço de 16 bits sem espaços\n");
-			fgets(address, 18, stdin);
-            address[16] = '\0';
-			if(checkInput(address) == -1){
-				printf("Endereço tem de conter apenas 0's e 1's\n");
-				continue;
-			}
-            //printf("address: %s\n", address);
-			nextHop = LookUp(root, address);
-            printf("\nO próximo hop do endereço especificado é %d\n", nextHop);
-			strcpy(address, "\0");
+			fgets(aux, 100, stdin);
+			if(strlen(aux) == 17){
 
+				 aux[16] = '\0';
+				if(checkInput(aux) == -1){
+					printf("Endereço tem de conter apenas 0's e 1's\n");
+					continue;
+				}
+	            //printf("address: %s\n", address);
+				nextHop = LookUp(root, aux);
+	            printf("\nO próximo hop do endereço especificado é %d\n", nextHop);
+				strcpy(aux, "\0");
+
+			}else{
+				printf("Endereço com tamanho inválido.\n");
+			}
+           
 		}else if(!strcasecmp(option, "i")){
 
 			printf("- Digite o prefixo e o next hop associado com o formato <prefixo nextHop>\n");
@@ -67,12 +73,12 @@ int main(int argc, char *argv[]){
 				continue;
 				
 			}
-			if(strcmp(address, "e")){
+			if(!strcmp(address, "e")){
 				if(nextHop <= 0){
 					printf("Hop tem de ser positivo\n");
 					continue;
 				}
-				root
+				changeRootHop(root, nextHop);
 				strcpy(address, "\0");
 				continue;
 			}
@@ -91,7 +97,13 @@ int main(int argc, char *argv[]){
 		}else if(!strcasecmp(option, "d")){
 
 			printf("- Digite o prefixo que pretende eliminar\n");
-			fgets(address, 18, stdin);
+			fgets(address, 100, stdin);
+			/*if(!strcmp(address, "e\n")){
+				changeRootHop(root, -1);
+				strcpy(address, "\0");
+				continue;
+			}*/
+
             address[strlen(address)-1] = '\0';
 			if(checkInput(address) == -1){
 				printf("Prefixo tem de conter apenas 0's e 1's\n");
@@ -102,7 +114,6 @@ int main(int argc, char *argv[]){
 		
 		}else if(!strcasecmp(option, "o")){
 			root=compressTreeOptimal(root);
-			//freeTreeHops(NULL,root,'s');
 
 		}
 		else if(!strcasecmp(option, "c")){

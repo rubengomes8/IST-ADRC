@@ -249,9 +249,7 @@ int LookUp(binaryTree *root, char *address){
 		j=1;
 
 	}
-//1011101100110011
-//011101100110011
-//11101100110011
+
 	return lastHop;
 }
 
@@ -262,127 +260,19 @@ binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop){
 	new->nextHop = nextHop;
 	return root;
 }
-/*
-//DeletePrefix, that receives as input a prefix tree and a prefix and returns a prefix tree with the prefix withdrawn;
-binaryTree *DeletePrefix(binaryTree *root, char *prefix){
-	//se for folha faz free do node e mete o pai a apontar para NULL, se não for apenas mete o nextHop a -1
-	//ter em atenção que o prefixo pode não existir
-	binaryTree *aux = root;
-	binaryTree *cur;
-	binaryTree *prev;
-	int i = 1;
-	char flag;
-	binaryTree *lastWithHop = root;
-	char *lastPrefix = (char *)malloc(strlen(prefix)*sizeof(char)+1);
-	
 
-
-	while(strlen(prefix) > 0)
-	{
-		if(prefix[0] == '0'){
-
-			prev = aux;
-			if(prev->nextHop != -1){
-				lastWithHop = prev;
-				strcpy(lastPrefix, prefix);
-			}
-			if(aux->left != NULL)
-			{
-				aux = aux->left;
-				flag = 'l';
-			} else {
-				printf("Esse prefixo não existe... A terminar tarefa...\n");
-				return root;
-			}
-			
-
-		}else if (prefix[0] == '1'){
-
-			prev = aux;
-			if(prev->nextHop != -1){
-				lastWithHop = prev;
-				strcpy(lastPrefix, prefix);
-			}
-			if (aux->right != NULL){
-				aux = aux->right;
-				flag = 'r';
-			} else {
-				printf("Esse prefixo não existe... A terminar tarefa...\n");
-				return root;
-			}
-
-			
-
-		}else{
-
-			//Significa que o ficheiro de texto está incorreto?
-			printf("Prefixos invalidos com caracteres diferentes de 0 e de 1\n");
-			exit(-1);
-		}
-
-		//retirar o caracter que já foi tratado (o 1º)
-		while(prefix[i] != '\0'){
-			prefix[i-1] =  prefix[i];
-			i++;
-		}
-		prefix[i-1] = '\0';
-		i=1;
-	}
-
-	if(aux->left == NULL && aux->right == NULL){
-		if(flag == 'l')
-			prev->left = NULL;
-		else if(flag == 'r')
-			prev->right = NULL;
-		free(aux);
-	} else{
-		i=1;
-		if(prev->nextHop == -1){
-			aux = lastWithHop;
-			while(strlen(lastPrefix) > 0){
-				if(lastPrefix[0] == '0'){
-					aux = aux->left;
-				}else if(lastPrefix[0] == '1'){
-					aux = aux->right;
-				}
-
-				while(lastPrefix[i] != '\0'){
-					lastPrefix[i-1] =  lastPrefix[i];
-					i++;
-				}
-				lastPrefix[i-1] = '\0';
-				i=1;
-
-				if(lastPrefix[0] == '0'){
-					cur = aux->left;
-					free(aux);
-				}else if(lastPrefix[0] == '1'){
-					cur = aux->right;
-					free(aux);
-				}
-				aux=cur;
-			}
-		}else{
-			aux->nextHop = -1;
-		}
-		
-	}
-	free(lastPrefix);
-	return root;
-}
-*/
 
 binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 	char px[strlen(prefix)];
-	printf("prefixo de entrada %s, tamanho %d\n" , prefix, strlen(prefix));
+	//printf("prefixo de entrada %s, tamanho %ld\n" , prefix, strlen(prefix));
 	binaryTree * ret;
 	int l=0,r=0;
 	if(strlen(prefix) > 0 ){
 		if(prefix[0]=='0'){
 			if(root->left!=NULL){
 				strcpy(px,prefix+1);
-				printf(" prefixo: %s\n",prefix);
-				printf(" %s\n",px);
+				//printf(" prefixo: %s\n",prefix);
+				//printf(" %s\n",px);
 				ret=DeletePrefix(root->left,px);
 				l=1;
 			}
@@ -396,8 +286,8 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 		else if(prefix[0]=='1'){
 			if(root->right!=NULL){
 				strcpy(px,prefix+1);
-				printf(" prefixo: %s\n",prefix);
-				printf(" %s\n",px);
+				//printf(" prefixo: %s\n",prefix);
+				//printf(" %s\n",px);
 				ret=DeletePrefix(root->right,px);
 				r=1;
 			}
@@ -411,7 +301,7 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 
 	if(strlen(prefix)==0){
 		if(root->left==NULL && root->right==NULL){
-			printf("apaguei prefixo: %d", root->nextHop);
+			//printf("apaguei prefixo: %d", root->nextHop);
 			free(root);	
 			root = NULL; //?????
 			return NULL;
@@ -475,25 +365,15 @@ binaryTree *DeletePrefix(binaryTree *root, char *prefix){
 binaryTree *CompressTree(binaryTree *root){
 
 	compressTreeRecursive(NULL, root, root->nextHop, 's');
-	//clusterTree(root);
 	
 	return root;
 }
 
 void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char direction){
-	//se não for root compara com next Hop q veio de cima
-		//se for igual 
-			//se nao tiver filhos apaga-se e retorna o seu Hop
-			//se tiver pelo menos 1 filho mete seu Hop a -1 e envia left e right seu Hop
-		//se for diferente
-			//envia left e right seu hop
-	//se for root envia left e right seu hop
 
 	binaryTree *aux;
 	if(prev == NULL){ //1ª invocação -> é root
 		aux = root;
-
-		/************************************************* Fui eu q adicionei para esquecer o clusterTree ***************************************************/
 
 		if(aux->left != NULL && aux->right != NULL && aux->left->nextHop == aux->right->nextHop && aux->left->nextHop != -1){
 			if(aux->left->left == NULL && aux->left->right == NULL && aux->right->left == NULL && aux->right->right == NULL){ //apaga folhas parentes com mesmo hop
@@ -529,7 +409,6 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 			aux = prev->right;
 
 
-		/************************************************* Fui eu q adicionei para esquecer o clusterTree ***************************************************/
 		if(aux->left != NULL && aux->right != NULL && aux->left->nextHop == aux->right->nextHop && aux->left->nextHop != -1){
 			if(aux->left->left == NULL && aux->left->right == NULL && aux->right->left == NULL && aux->right->right == NULL){ //apaga folhas parentes com mesmo hop
 				aux->nextHop = aux->left->nextHop;
@@ -549,11 +428,9 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 		//Envia para a esquerda e direita com o Hop que vinha de cima
 		if(aux->nextHop == -1){
 			if(aux->left != NULL){
-				//l_exist = true;
 				compressTreeRecursive(aux, root, nextHop, 'l');
 			}
 			if(aux->right != NULL){
-				//r_exist = true;
 				compressTreeRecursive(aux, root, nextHop, 'r');
 			}
 
@@ -570,7 +447,7 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 			}
 
 		}else{
-			//por implementar
+			
 			if(aux->nextHop==nextHop){
 				if(aux->left==NULL && aux->right==NULL){
 					free(aux);
@@ -585,11 +462,9 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 				{
 					aux->nextHop = -1;
 					if(aux->left != NULL){
-						//l_exist = true;
 						compressTreeRecursive(aux, root, nextHop, 'l');
 					}
 					if(aux->right != NULL){
-						//r_exist = true;
 						compressTreeRecursive(aux, root, nextHop, 'r');
 					}
 
@@ -599,11 +474,9 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 			else{
 				//diferente de cima
 				if(aux->left != NULL){
-					//l_exist = true;
 					compressTreeRecursive(aux, root, aux->nextHop, 'l');
 				}
 				if(aux->right != NULL){
-					//r_exist = true;
 					compressTreeRecursive(aux, root, aux->nextHop, 'r');
 				}
 
@@ -615,35 +488,6 @@ void compressTreeRecursive(binaryTree *prev, binaryTree *root, int nextHop, char
 	}
 
 }
-/*
-int clusterTree(binaryTree * node){
-	int l, r;
-	if(node->left != NULL){
-		
-		l=clusterTree(node->left);
-	}
-	if(node->right != NULL){
-		
-		r=clusterTree(node->right);
-	}
-	//se os nextHops dos filhos, l e r forem iguais 
-	if(node->nextHop==l || node->nextHop==-1){
-		if(r==l){
-			printf("%d %d\n", r, l);
-			printf("%d\n",  node->nextHop);			
-			if(node->left->left==NULL && node->left->right==NULL){
-				printf("adssfd\n");
-				free(node->left);
-				free(node->right);
-				node->nextHop=r;		
-			}
-			else{
-				node->nextHop=-1;
-			}
-		}
-	}
-	return node->nextHop;
-}*/
 
 //Faz free dos nós recursivamente
 void freeTree(binaryTree *prev, binaryTree *root, char direction){
@@ -694,21 +538,19 @@ void freeTreeHops(binaryTree *prev, binaryTree *root, char direction){
 }
 
 binaryTree * compressTreeOptimal(binaryTree *root){
-	//passo 1: cada nó passa a ter 0 ou 2 filhos root to leaves
-	//e passo 2: leaves to root y = a inters b if a inters b != 0 else y = a union b
-	root->head_hops=Step1_and_2(root, -2);
-	hopList *ax=root->head_hops;
 	
-	printf("root->head_hops\n");
+	root->head_hops=Step1_and_2(root, -2);
+	//hopList *ax=root->head_hops;
+	
+	/*("root->head_hops\n");
 	while (ax!=NULL)
 	{
 		printf("%d, ",ax->hop);
 		ax=ax->next;
-	}
-	printf("\n");
+	}*/
+	//printf("\n");
 
 	//passo 3: root to leaves
-	printf("aquiwe\n");
 	Step3(NULL, root, root->nextHop, 's');
 	freeHopList(root);
 	return root;
@@ -752,7 +594,6 @@ void Step3(binaryTree *prev, binaryTree *root, int hop, char direction){
 	if(prev == NULL){ //root
 		aux = root;
 		aux->nextHop = aux->head_hops->hop;		//choose one hop from the list (first)
-		//apagar a lista de hops??
 		if(aux->left != NULL)
 			Step3(aux, root, aux->nextHop, 'l');
 		if(aux->right != NULL)
@@ -779,8 +620,7 @@ void Step3(binaryTree *prev, binaryTree *root, int hop, char direction){
 		}else{ //hopInList == true -> apaga-se
 			if(aux->right == NULL && aux->left == NULL){ //elimina o nó pq é folha
 				freeHopList(aux);
-				free(aux); //pai tem de apontar para NULL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				aux=NULL;
+				free(aux); 			aux=NULL;
 				if(direction == 'l')
 					prev->left = NULL;
 				else if(direction == 'r')
@@ -869,24 +709,24 @@ hopList* percolate(hopList *left, hopList *right){
 	hopList *new_node=NULL;
 	bool intersected=false;
 
-	hopList *ax=left;
+	//hopList *ax=left;
 
-	printf("Left\n");
+	/*printf("Left\n");
 	while (ax!=NULL)
 	{
 		printf("%d, ",ax->hop);
 		ax=ax->next;
 	}
-	printf("\n");
+	printf("\n");*/
 
-	printf("Right\n");
+	/*printf("Right\n");
 	ax=right;
 	while (ax!=NULL)
 	{
 		printf("%d, ",ax->hop);
 		ax=ax->next;
 	}
-	printf("\n");
+	printf("\n");*/
 
 	while(aux_left!=NULL && aux_right!=NULL){
 
@@ -994,22 +834,6 @@ hopList* percolate(hopList *left, hopList *right){
 		aux_right=aux_right->next;
 	}
 
-	/*
-	ax=intersectList;
-	while (ax!=NULL)
-	{
-		printf("intersect %d, ",ax->hop);
-		ax=ax->next;
-	}
-	printf("\n");
-
-	ax=unionList;
-	while (ax!=NULL)
-	{
-		printf("union %d, ",ax->hop);
-		ax=ax->next;
-	}
-	*/
 	
 
 	if(unionList==NULL){
@@ -1021,27 +845,9 @@ hopList* percolate(hopList *left, hopList *right){
 	}
 	
 } 
-/*
-hopList * Step2( binaryTree *root){
-	hopList *list_head_left = NULL;
-	hopList *list_head_right = NULL;
-	hopList *list_head = NULL;
-	//post order - left right root
-
-	if(root->left->left != NULL){
-		list_head_left = Step2(root->left);
-	}
-	else{//nível 2
-		
-		root->left->nextHop;
-	}
-
-	if(root->right->left != NULL){
-		list_head_right = Step2(root->right);
-	}
 
 
-
+void changeRootHop(binaryTree *root, int hop){
+	root->nextHop = hop;
 }
-*/
 
