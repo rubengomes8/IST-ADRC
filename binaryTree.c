@@ -539,7 +539,7 @@ void freeTreeHops(binaryTree *prev, binaryTree *root, char direction){
 
 binaryTree * compressTreeOptimal(binaryTree *root){
 	
-	root->head_hops=Step1_and_2(root, -2);
+	root->head_hops=Step1_and_2(root, -1);
 	//hopList *ax=root->head_hops;
 	
 	/*("root->head_hops\n");
@@ -764,7 +764,7 @@ hopList* percolate(hopList *left, hopList *right){
 			else if (aux_left->hop == aux_right->hop)
 			{
 				intersected=true;
-				freeIntersectedList(intersectList);
+				
 				new_node=new_hop(aux_right->hop);
 				if(unionList==NULL){
 					unionList=new_node;
@@ -816,7 +816,9 @@ hopList* percolate(hopList *left, hopList *right){
 			auxIntList=new_node;
 		}
 		else{
+			intersectList=new_node;
 			auxIntList=new_node;
+			
 		}
 		aux_left=aux_left->next;
 	}
@@ -829,6 +831,7 @@ hopList* percolate(hopList *left, hopList *right){
 			auxIntList=new_node;
 		}
 		else{
+			intersectList=new_node;
 			auxIntList=new_node;
 		}
 		aux_right=aux_right->next;
@@ -841,6 +844,7 @@ hopList* percolate(hopList *left, hopList *right){
 	}
 	else
 	{
+		freeIntersectedList(intersectList);
 		return unionList;
 	}
 	
