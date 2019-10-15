@@ -8,7 +8,7 @@ int main(int argc, char *argv[]){
 	binaryTree *root;
 	char option[2];
 	char address[18];
-	char aux[25];
+	char aux[100];
 	int nextHop;
 	if(argc<2){
 		printf("Falta de argumentos\nExemplo: ./lmp tabela_prefixos.txt");
@@ -60,8 +60,22 @@ int main(int argc, char *argv[]){
 		}else if(!strcasecmp(option, "i")){
 
 			printf("- Digite o prefixo e o next hop associado com o formato <prefixo nextHop>\n");
-			fgets(aux, 25, stdin);
+			fgets(aux, 100, stdin);
 			sscanf(aux, "%s %d", address, &nextHop);
+			if(strlen(address)>16){
+				printf("Limite do prefixo ultrapassado\n");
+				continue;
+				
+			}
+			if(strcmp(address, "e")){
+				if(nextHop <= 0){
+					printf("Hop tem de ser positivo\n");
+					continue;
+				}
+				root
+				strcpy(address, "\0");
+				continue;
+			}
 			if(checkInput(address) == -1){
 				printf("Prefixo tem de conter apenas 0's e 1's\n");
 				continue;
