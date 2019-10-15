@@ -710,7 +710,7 @@ binaryTree * compressTreeOptimal(binaryTree *root){
 	//passo 3: root to leaves
 	printf("aquiwe\n");
 	Step3(NULL, root, root->nextHop, 's');
-
+	freeHopList(root);
 	return root;
 }
 
@@ -778,7 +778,9 @@ void Step3(binaryTree *prev, binaryTree *root, int hop, char direction){
 
 		}else{ //hopInList == true -> apaga-se
 			if(aux->right == NULL && aux->left == NULL){ //elimina o nó pq é folha
+				freeHopList(aux);
 				free(aux); //pai tem de apontar para NULL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				aux=NULL;
 				if(direction == 'l')
 					prev->left = NULL;
 				else if(direction == 'r')
@@ -795,10 +797,11 @@ void Step3(binaryTree *prev, binaryTree *root, int hop, char direction){
 
 	}
 
-	//freeHopList(aux);
+	
 	/*******************************************Verificar se ainda tem filhos ******************************************************/
-	if(prev != NULL){
-		if(aux->left == NULL && aux->right == NULL && aux->nextHop == -1){
+	if(prev != NULL && aux!=NULL){
+		freeHopList(aux);
+		if(aux->nextHop == -1 && aux->left == NULL && aux->right == NULL ){
 
 			free(aux);
 			if(direction == 'l'){
