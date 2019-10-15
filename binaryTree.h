@@ -28,6 +28,7 @@ void freeIntersectedList(hopList *node);
 hopList* new_hop(int hop);
 hopList* percolate(hopList *left, hopList *right);
 void changeRootHop(binaryTree *root, int hop);
+bool checkRootHop(binaryTree *root, int hop);
 
 int LookUp(binaryTree *root, char *address);
 binaryTree *InsertPrefix(binaryTree *root, char *prefix, int nextHop);

@@ -113,7 +113,10 @@ int main(int argc, char *argv[]){
 			strcpy(address, "\0");
 		
 		}else if(!strcasecmp(option, "o")){
-			root=compressTreeOptimal(root);
+			if(!checkRootHop(root, -1))
+				root=compressTreeOptimal(root);
+			else
+				printf("\nImpossível realizar compressão ótima, pois não está associado um next-hop default.\n");
 
 		}
 		else if(!strcasecmp(option, "c")){

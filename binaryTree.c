@@ -855,3 +855,10 @@ void changeRootHop(binaryTree *root, int hop){
 	root->nextHop = hop;
 }
 
+bool checkRootHop(binaryTree *root, int hop){
+	if(root->nextHop == hop)
+		return true;
+	else
+		return false;	
+}
+
