@@ -56,7 +56,14 @@ int main(int argc, char *argv[]){
 				}
 	            //printf("address: %s\n", address);
 				nextHop = LookUp(root, aux);
-	            printf("\nO próximo hop do endereço especificado é %d\n", nextHop);
+				if(nextHop>0){
+	            	printf("\nO próximo hop do endereço especificado é %d\n", nextHop);
+				}
+				else
+				{
+					printf("Endereço sem correspondencia na tabela, pacote descartado\n");
+				}
+				
 				strcpy(aux, "\0");
 
 			}else{
@@ -113,10 +120,10 @@ int main(int argc, char *argv[]){
 			strcpy(address, "\0");
 		
 		}else if(!strcasecmp(option, "o")){
-			if(!checkRootHop(root, -1))
-				root=compressTreeOptimal(root);
-			else
-				printf("\nImpossível realizar compressão ótima, pois não está associado um next-hop default.\n");
+			//if(!checkRootHop(root, -1))
+			root=compressTreeOptimal(root);
+			//else
+			//	printf("\nImpossível realizar compressão ótima, pois não está associado um next-hop default.\n");
 
 		}
 		else if(!strcasecmp(option, "c")){

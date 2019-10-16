@@ -219,6 +219,7 @@ int LookUp(binaryTree *root, char *address){
 					lastHop = aux->nextHop;
 					/*if(aux->left == NULL && aux->right == NULL)
 						break;*/
+						
 				}
 
 			}else if (addr[0] == '1'){
@@ -539,7 +540,7 @@ void freeTreeHops(binaryTree *prev, binaryTree *root, char direction){
 
 binaryTree * compressTreeOptimal(binaryTree *root){
 	
-	root->head_hops=Step1_and_2(root, -1);
+	root->head_hops=Step1_and_2(root, 0);
 	//hopList *ax=root->head_hops;
 	
 	/*("root->head_hops\n");
